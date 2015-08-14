@@ -35,6 +35,8 @@
      completionHandler:(void(^)(DSOUser *))completionHandler
           errorHandler:(void(^)(NSError *))errorHandler;
 
+- (void)updateUserAvatarWithPhoto:(UIImage *)image;
+
 - (void)logoutWithCompletionHandler:(void(^)(NSDictionary *))completionHandler
                        errorHandler:(void(^)(NSError *))errorHandler;
 

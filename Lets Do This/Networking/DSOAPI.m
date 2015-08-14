@@ -11,6 +11,7 @@
 #import <SSKeychain/SSKeychain.h>
 #import "DSOCampaign.h"
 #import "DSOReportbackItem.h"
+#import "DSOUserManager.h"
 
 // API Constants
 #define isActivityLogging NO
@@ -147,6 +148,29 @@
               errorHandler(error);
           }
       }];
+}
+
+- (void)updateUserAvatarWithPhoto:(UIImage *)image {
+    
+    
+    NSString *userID = [DSOUserManager sharedInstance].user.userID;
+    
+    NSString *urlPath = [NSString stringWithFormat:@"users/%@/avatar", userID];
+    
+    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+    
+    NSString *fileNameForImage = [NSString stringWithFormat:@"User_%@_ProfileImage", userID];
+    
+    [self POST:urlPath
+    parameters:nil
+     constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+         [formData appendPartWithFileData:imageData name:@"photo" fileName:fileNameForImage mimeType:@"image/jpeg"];
+     } success:^(NSURLSessionDataTask *task, id responseObject) {
+         NSLog(@"Success user avatar upload: %@ ***** %@", task.response, responseObject);
+     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+         NSLog(@"Error: %@ ***** %@", task.response, error);
+     }];
+    
 }
 
 - (void)logoutWithCompletionHandler:(void(^)(NSDictionary *))completionHandler
